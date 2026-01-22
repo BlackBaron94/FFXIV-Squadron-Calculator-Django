@@ -1,0 +1,21 @@
+{% extends 'squadron_calculator/base.html' %}
+{% block title %}
+    Squadron Member Creation
+{% endblock %}
+{% block content %}
+    <div class="central-wrapper">
+        <div class="title-board">
+            <h1>Member Creation</h1>
+        </div>
+    </div>
+    <form>
+        {% csrf_token %}
+        <div class="form">
+            <div class="form-row" style="background-color: purple;">
+                {{ form.name.label }}:
+            </div>
+            {{ form.name }}
+        </div>
+
+
+{% endblock %}

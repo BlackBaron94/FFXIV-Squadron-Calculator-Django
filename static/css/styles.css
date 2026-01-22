@@ -1,0 +1,80 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0; 
+    padding: 75px 0;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #ffc107 !important;
+}
+
+.navbar {
+    width: 100%;
+    z-index: 1000;
+}
+
+.container {
+    flex: 1;
+}
+
+.central-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.title-board {
+    background-color: #ffc107;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px 10px;
+    margin: 10px 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.form {
+    background-color: #ffd218;
+    border: 1px solid black;
+    border-radius: 20px;
+    text-align: center;
+    margin: 15px;
+    padding: 15px;
+}
+
+.form-row {
+    text-align: center;
+    justify-content: center;
+    width: 150px;
+    display: flex;
+}
+
+.my-btn {
+    border-radius: 5px;
+    background-color: green;
+    font-size: 22px;
+    margin: 10px;
+}
+
+.my-table {
+    border: 2px solid #ffd218;
+    border-radius: 50px;
+
+}
+
+th {
+    border-right: 2px solid purple;
+}
+
+th:last-child {
+    border-right: none;
+}
+
+tr {
+    border: 1px solid green;
+}
+

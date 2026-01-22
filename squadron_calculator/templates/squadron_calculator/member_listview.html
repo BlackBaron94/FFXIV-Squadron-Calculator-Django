@@ -1,0 +1,41 @@
+{% extends 'squadron_calculator/base.html' %}
+{% block title %}
+    Your Members
+{% endblock %}
+{% block content %}
+    <div class="central-wrapper">
+        <div class="title-board">
+            <h1> Welcome to your member list! </h1>
+        </div>
+    
+        <table class="table-responsive my-table">
+            <thead>
+                <th>Name</th>
+                <th>Job</th>
+            </thead>
+            <tbody>
+                {% for object in object_list %}
+                    <tr>
+                        <td>
+                            {{ object.name }}
+                        </td>
+                        <td> 
+                            {{ object.job }}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td col="9">
+                            Your member list is empty!
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{% url 'member_creation' %}">
+        <button class="my-btn">
+            Add members!
+        </button>
+    </a>
+{% endblock %}
