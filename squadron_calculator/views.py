@@ -31,7 +31,6 @@ class MyUpdateView(UpdateView):
 # The subclasses will need to fill in the self.object variable accordingly
 class MemberFormView:
     def post(self, request, *args, **kwargs):
-        print("\n\nMemberFormView POST method called\n\n")
         main_form = self.get_form()
         chemistry_form = ChemistryForm(data=request.POST)
         if not main_form.is_valid():
@@ -41,7 +40,6 @@ class MemberFormView:
         # If chemistry form contains data, they are validated and saved accordingly
         # If it's empty, it's ignored and the main form is saved instead
         if chemistry_form.changed_data:
-            print("\n\nChemistry Form got shit goin on\n\n")
             # If the chemistry form is invalid, the main form isn't saved
             if chemistry_form.is_valid():
                 chemistry = chemistry_form.save()
@@ -55,7 +53,6 @@ class MemberFormView:
                 return self.render_to_response(
                     self.get_context_data(form=main_form, chemistry_form=chemistry_form)
                 )
-        print("\n\nChemistry Form empty, no changes\n\n")
         self.object = main_form.save()
         return self.form_valid(main_form)
 
@@ -81,6 +78,7 @@ class MemberCreateView(SuccessMessageMixin, MemberFormView, MyCreateView):
         kwargs['chemistry_form'] = chemistry_form
         return super().get_context_data(**kwargs)
 
+    # Override of post method of MemberFormView to set self.object to None for creation
     def post(self, request, *args, **kwargs):
         self.object = None
         return super().post(request, *args, **kwargs)
@@ -105,9 +103,9 @@ class MemberUpdateView(SuccessMessageMixin, MemberFormView, MyUpdateView):
         kwargs['chemistry_form'] = chemistry_form
         return super().get_context_data(**kwargs)
 
+    # Override of post method of MemberFormView to set self.object to the instance being updated
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        print("\n\nMemberUpdateView POST method called\n\n")
         return super().post(request, *args, **kwargs)
     
 class MemberDeleteView(DeleteView):
