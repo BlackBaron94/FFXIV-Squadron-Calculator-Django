@@ -1,41 +1,118 @@
 {% extends 'squadron_calculator/base.html' %}
-{% block title %}
-    Your Members
+{% block title %} 
+  Your Members 
 {% endblock %}
+
 {% block content %}
-    <div class="central-wrapper">
-        <div class="title-board">
-            <h1> Welcome to your member list! </h1>
-        </div>
-    
-        <table class="table-responsive my-table">
-            <thead>
-                <th>Name</th>
-                <th>Job</th>
-            </thead>
-            <tbody>
-                {% for object in object_list %}
-                    <tr>
-                        <td>
-                            {{ object.name }}
-                        </td>
-                        <td> 
-                            {{ object.job }}
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td col="9">
-                            Your member list is empty!
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+  <div class="central-wrapper container mt-5">
+    <div class="title-board text-center mb-4">
+      <h1>
+        Member List
+      </h1>
     </div>
-    <a href="{% url 'member_creation' %}">
-        <button class="my-btn">
-            Add members!
-        </button>
-    </a>
+    <div class="table-responsive">
+      <table class="table table-dark table-hover table-striped shadow">
+        <thead class="table-group-divider">
+          <tr>
+            <th rowspan="2" class="align-middle text-center">
+              Name
+            </th>
+            <th colspan="3" class="text-center">
+              Stats
+            </th>
+            <th rowspan="2" class="align-middle text-center">
+              Class
+            </th>
+            <th rowspan="2" class="align-middle text-center">
+              Race
+            </th>
+            <th rowspan="2" class="align-middle text-center">
+              Level
+            </th>
+            <th rowspan="2" class="align-middle text-center">
+              Chemistry
+            </th>
+            <th rowspan="2" class="align-middle text-center">
+              Actions
+            </th>
+          </tr>
+          <tr>
+            <th class="text-center small">
+              Physical
+            </th>
+            <th class="text-center small">
+              Mental
+            </th>
+            <th class="text-center small">
+              Tactical
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for object in object_list %}
+            <tr>
+              <td class="fw-bold text-center align-middle">
+                {{ object.name }}
+              </td>
+              <td class="text-center text-info align-middle">
+                {{ object.physical_stat }}
+              </td>
+              <td class="text-center text-warning align-middle">
+                {{ object.mental_stat }}
+              </td>
+              <td class="text-center text-success align-middle">
+                {{ object.tactical_stat }}
+              </td>
+              <td class="fw-bold text-center align-middle">
+                {{ object.member_class }}
+              </td>
+              <td class="fw-bold text-center align-middle">
+                {{ object.race }}
+              </td>
+              <td class="text-center text-success align-middle">
+                <span class="badge bg-primary">
+                  Lvl {{ object.level }}
+                </span>
+              </td>
+              <td class="chemistry-cell text-center align-middle">
+                <label class="chem-condition">
+                  Condition: 
+                </label> 
+                {{ object.chemistry_condition|default_if_none:"---" }}
+                <br/>
+                <label class="chem-chance">
+                  Chance: 
+                </label> 
+                {{ object.chemistry_chance|default_if_none:"---" }}
+                <br/>
+                <label class="chem-reward">
+                  Reward: 
+                </label> 
+                {{ object.chemistry_reward|default_if_none:"---" }}
+              </td>
+              <td class="text-center text-success align-middle">
+                <a href="{% url 'member_update' object.id %}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a href="{% url 'member_delete' object.id %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="9" class="text-center">
+                Your member list is empty! Created members will appear here.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-4">
+      <a href="{% url 'member_creation' %}" class="my-btn btn btn-lg btn-primary shadow">
+        Add members!
+      </a>
+    </div>
+  </div>
 {% endblock %}

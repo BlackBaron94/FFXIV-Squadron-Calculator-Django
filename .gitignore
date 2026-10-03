@@ -29,3 +29,5 @@ media/
 
 # Logs
 *.log
+
+tasks/

@@ -1,0 +1,52 @@
+{% extends 'squadron_calculator/base.html' %}
+
+{% block title %} 
+  Delete {{ object.name }} 
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card bg-dark text-white shadow-lg border-danger">
+          <div class="card-header border-danger text-center bg-danger bg-opacity-10 py-3">
+            <h3 class="mb-0 text-danger">
+              <i class="fas fa-exclamation-triangle me-2"></i>Delete Member
+            </h3>
+          </div>
+          <div class="card-body text-center py-4">
+            <p class="lead mb-4">
+              Are you sure you want to dismiss 
+              <span class="text-info fw-bold">
+                {{ object.name }}
+              </span> 
+              from your squadron?
+            </p>
+            <div class="alert alert-secondary bg-opacity-10 border-secondary mb-4 py-2">
+              <small class="text-muted d-block uppercase small mb-1">
+                Current Assignment Details
+              </small>
+              {{ object }}
+            </div>
+
+            <form method="post">
+              {% csrf_token %}
+              <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-danger btn-lg px-4 shadow">
+                  <i class="fas fa-user-slash me-2"></i>Yes, Dismiss
+                </button>
+                <a href="{% url 'members' %}" class="btn btn-outline-light btn-lg px-4">
+                  <i class="fas fa-times me-2"></i>No, Keep
+                </a>
+              </div>
+            </form>
+          </div>
+          
+          <div class="card-footer border-secondary text-center small">
+            This action cannot be undone.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,72 +1,102 @@
 <!DOCTYPE html>
 <html lang="el">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>
-            {% block title %}
-                FFXIV Squadron Manager
-            {% endblock %}
-        </title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      {% block title %}
+        FFXIV Squadron Manager
+      {% endblock %}
+    </title>
 
-        {% load static %} 
-        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-        <style>   
-            {% block extra_css %}
-            {% endblock %}
-        </style>
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow fixed-top">
-            <div class="container">
-                <a class="navbar-brand" href="/">
-                    FFXIV Squadron
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon">
-                    </span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'members' %}">
-                                Members
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                Missions
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                Optimizer
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container mt-4">
-            {% block content %}
-            {% endblock %}
+    {% load static %} 
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/ffxiv.ico' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>   
+      {% block extra_css %}
+      {% endblock %}
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          FFXIV Squadron
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon">
+          </span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link {% if 'members' in request.path %}active{% endif %}" href="{% url 'members' %}">
+                Members
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if 'member-create' in request.path %}active{% endif %}" href="{% url 'member_creation' %}">
+                Create Member
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if 'missions' in request.path %}active{% endif %}" href="{% url 'missions' %}">
+                Missions
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if 'optimizer' in request.path %}active{% endif %}" href="{% url 'mission_optimizer' %}">
+                Mission Optimizer
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if 'parametrics' in request.path %}active{% endif %}" href="{% url 'parametrics' %}">
+                Parametrics
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
+    <div class="container">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
 
-        <footer class="text-center footer-dark bg-dark mt-auto py-3 border-top fixed-bottom">
-            <p class="small" style="color: #9a9c9e;">
-                <strong>
-                    © 2025 FFXIV Squadron Manager - Built with Django
-                </strong>
-            </p>
-        </footer>
+    <div class="container mt-5 mb-5">
+      {% block content %}
+      {% endblock %}
+    </div>
 
-        
-        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        {% block extra_js %}
-        {% endblock %}
-        
-    </body>
+    <footer class="text-center footer-dark bg-dark mt-5 py-3 border-top fixed-bottom">
+      <p class="small">
+        <div class="row">
+          <em style="color: #9a9c9e;">
+            FFXIV Squadron Manager is not affiliated with Square Enix.
+          </em>
+        </div>
+        <div class="row">
+          <strong style="color: #9a9c9e;">
+            © {{ current_year }} FFXIV Squadron Manager - Built with Django by <a href="https://github.com/BlackBaron94" target="blank">Black Baron</a>
+          </strong>
+        </div>
+      </p>
+    </footer>
+
+    
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    {% block extra_js %}
+    {% endblock %}
+    
+  </body>
 </html>

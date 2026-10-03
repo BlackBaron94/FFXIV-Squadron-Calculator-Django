@@ -44,6 +44,10 @@ body {
     text-align: center;
     margin: 15px;
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    text-align: center;
 }
 
 .form-row {
@@ -53,28 +57,68 @@ body {
     display: flex;
 }
 
+.nav-link.active {
+    background-color: #ffc107;
+    color: green !important;
+    border: 2px solid green;
+}
+
 .my-btn {
     border-radius: 5px;
     background-color: green;
     font-size: 22px;
     margin: 10px;
+    border: 2px solid black;
 }
 
-.my-table {
-    border: 2px solid #ffd218;
-    border-radius: 50px;
-
+.my-btn:hover,
+.my-btn:focus {
+    background-color: #ffc107;
+    color: green;
+    border: 2px solid green;
 }
 
-th {
-    border-right: 2px solid purple;
+
+.chem-condition {
+    color: crimson;
+    text-shadow: 0 0 5px rgba(255, 77, 77, 0.3);
 }
 
-th:last-child {
-    border-right: none;
+.chem-chance {
+    color: #4da6ff; 
+    text-shadow: 0 0 5px rgba(77, 166, 255, 0.3);
 }
 
-tr {
-    border: 1px solid green;
+.chem-reward {
+    color: gold;
+    text-shadow: 0 0 5px rgba(255, 255, 77, 0.3);
 }
 
+.chemistry-cell {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    line-height: 1.6;
+}
+
+.bordered {
+    border: 1px solid #ffc107;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
+#id_chemistry {
+    max-height: 200px;
+}
+
+input[type="checkbox"] {
+    accent-color: #ffc107;
+}
+
+input[type="radio"] {
+    accent-color: #ffc107;
+}
+
+a {
+    text-decoration: none;
+}
