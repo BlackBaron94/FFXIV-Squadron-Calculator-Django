@@ -43,8 +43,8 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if 'missions' in request.path %}active{% endif %}" href="{% url 'missions' %}">
-                Missions
+              <a class="nav-link {% if 'mission-type' in request.path %}active{% endif %}" href="{% url 'mission_types' %}">
+                Mission Types
               </a>
             </li>
             <li class="nav-item">
@@ -73,7 +73,7 @@
       {% endif %}
     </div>
 
-    <div class="container mt-5 mb-5">
+    <div class="container mb-5">
       {% block content %}
       {% endblock %}
     </div>

@@ -1,10 +1,10 @@
 string = (
     ('allied maneuvers', '1 Squadron Enlistment Manual'),
     ('pest eradication', '1 Squadron Enlistment Manual'),
-    ('impostor alert', '10 Priority Aetheryte Passes'),
+    ('imposter alert', '10 Priority Aetheryte Passes'),
     ('invasive testing', '10 Squadron Gear Maintenance Manuals'),
     ('armor annihilation', '10 Squadron Rationing Manuals'),
-    ('voidesent elimination', '10 Squadron Spiritbonding Manuals'),
+    ('voidsent elimination', '10 Squadron Spiritbonding Manuals'),
     ('cult crackdown', '10 Squadron Engineering Manuals'),
     ('outlaw subjugation', '10 Squadron Survival Manuals'),
     ('infiltrate and rescue', '10 Squadron Battle Manuals'),

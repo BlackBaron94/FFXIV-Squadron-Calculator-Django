@@ -10,8 +10,14 @@ from .choices import (
     )
 
 class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Creation Date")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Update Date")
+    created_at = models.DateTimeField(
+        auto_now_add=True, 
+        verbose_name="Creation Date"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, 
+        verbose_name="Update Date"
+    )
 
     class Meta:
         abstract = True
@@ -41,29 +47,46 @@ def get_condition(member):
         return None
     if str(chemistry).find(accompanying_string) != -1:
         try:
-            after_accompanying = str(chemistry)[(str(chemistry).find(accompanying_string) + len(accompanying_string)):]
+            after_accompanying = str(chemistry)[
+                (
+                    str(chemistry).find(accompanying_string) \
+                    + len(accompanying_string)
+                )
+            :]
             accompanied = after_accompanying[0:after_accompanying.find(',')]
             if accompanied == 'someone of the same class':
                 condition = f'With {member.member_class}'
             else:
                 accompanied = accompanied[2:].capitalize()
                 races = Race.objects.all().values_list('name', flat=True)
-                classes = MemberClass.objects.all().values_list('name', flat=True)
+                classes = MemberClass.objects.all().values_list(
+                    'name', 
+                    flat=True
+                )
                 if accompanied in races:
                     condition = f'With {accompanied}'
                 elif accompanied in classes:
                     condition = f'With {accompanied}'
                 else:
-                    condition = 'ERROR: failed to find condition, accompanied check failed'
+                    condition = 'ERROR: failed to find condition,\
+                          accompanied check failed'
         except:
-            condition = "ERROR: parsing failed with try-except block in 'accompanying' block."
+            condition = "ERROR: parsing failed with try-except block\
+                  in 'accompanying' block."
     elif str(chemistry).find(different_string) != 1:
         try:
-            after_condition = str(chemistry)[(str(chemistry).find(different_string) + len(different_string)):]
+            after_condition = str(chemistry)[
+                (
+                    str(chemistry).find(different_string) + len(
+                            different_string
+                        )
+                )
+            :]
             different_case = after_condition[0:after_condition.find(',')]
             condition = f'Members different {different_case}'
         except:
-            condition = "ERROR: parsing failed with try-except block in 'all squadron members' block."
+            condition = "ERROR: parsing failed with try-except block in \
+                'all squadron members' block."
     return condition
 
 def get_percentage(member):
@@ -72,7 +95,10 @@ def get_percentage(member):
     if not chemistry:
         return None
     if str(chemistry).find(search_string) != -1:
-        percentage = str(chemistry)[(str(chemistry).find(search_string) + len(search_string)):str(chemistry).find('%')] + '%'
+        percentage = str(chemistry)[
+            (
+                str(chemistry).find(search_string) + len(search_string)
+            ):str(chemistry).find('%')] + '%'
     else:
         percentage = None
     return percentage
@@ -86,10 +112,14 @@ def get_reward(member):
     if end == -1:
         end = len(chemistry) - 1
     if str(chemistry).find('receive ') != -1:
-        reward = str(chemistry)[str(chemistry).find('receive ') + len('receive '):end].capitalize()
+        reward = str(chemistry)[
+            str(chemistry).find('receive ') + len('receive '):end
+        ].capitalize()
     else:
         search_string = 'party chemistry trigger rates increase by '
-        trigger_ratio_increase = str(chemistry)[str(chemistry).find(search_string) + len(search_string):-1]
+        trigger_ratio_increase = str(chemistry)[
+            str(chemistry).find(search_string) + len(search_string):-1
+        ]
         reward = f'Trigger Rate +{trigger_ratio_increase}'
     return reward
         
@@ -99,8 +129,16 @@ class SquadronMember(TimeStampedModel):
     physical_stat = models.IntegerField(verbose_name="Physical Stat")
     mental_stat = models.IntegerField(verbose_name="Mental Stat")
     tactical_stat = models.IntegerField(verbose_name="Tactical Stat")
-    member_class = models.ForeignKey(MemberClass, on_delete=models.PROTECT, verbose_name="Class")
-    race = models.ForeignKey(Race, on_delete=models.PROTECT, verbose_name="Race")
+    member_class = models.ForeignKey(
+        MemberClass, 
+        on_delete=models.PROTECT, 
+        verbose_name="Class"
+    )
+    race = models.ForeignKey(
+        Race, 
+        on_delete=models.PROTECT, 
+        verbose_name="Race"
+    )
     chemistry = models.ForeignKey(
         'Chemistry',
         on_delete=models.SET_NULL,
@@ -114,18 +152,20 @@ class SquadronMember(TimeStampedModel):
             MinValueValidator(SQUADRON_MIN_LEVEL),
             MaxValueValidator(SQUADRON_MAX_LEVEL)
         ],
-        help_text=f"Level can only be between {SQUADRON_MIN_LEVEL} and {SQUADRON_MAX_LEVEL}"
+        help_text=f"Level can only be between {SQUADRON_MIN_LEVEL}\
+              and {SQUADRON_MAX_LEVEL}"
     )
 
     def __str__(self) -> str:
-        return "Squadron Member '{0}', with {1}/{2}/{3} stats, {4} class, {5} race.".format(
+        return "Squadron Member '{0}', with {1}/{2}/{3} stats,\
+              {4} class, {5} race.".format(
             self.name,
             self.physical_stat,
             self.mental_stat,
             self.tactical_stat,
             self.member_class,
             self.race
-            )
+        )
 
     @property
     def chemistry_condition(self):
@@ -149,11 +189,16 @@ class SquadronMissionType(TimeStampedModel):
     reward = models.TextField(verbose_name="Reward")
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.title} - {self.reward}"
+
+    @property
+    def reward_count(self):
+        return int(self.reward.split(' ')[0]) if self.reward else 0
 
     @property
     def get_details(self):
-        return f"I am mission type titled '{self.title}' and my reward is '{self.reward}'."
+        return f"I am mission type titled '{self.title}' \
+            and my reward is '{self.reward}'."
 
 class SquadronMission(TimeStampedModel):
     mission_type = models.ForeignKey(
@@ -166,9 +211,13 @@ class SquadronMission(TimeStampedModel):
         default=SuccessChance.LOW,
         verbose_name="Success Chance Message"
     )
-    required_physical = models.IntegerField(verbose_name="Required Physical Stat")
+    required_physical = models.IntegerField(
+        verbose_name="Required Physical Stat"
+    )
     required_mental = models.IntegerField(verbose_name="Required Mental Stat")
-    required_tactical = models.IntegerField(verbose_name="Required Tactical Stat")
+    required_tactical = models.IntegerField(
+        verbose_name="Required Tactical Stat"
+    )
     
     def __str__(self):
         return f"{self.mission_type.title}"
@@ -176,34 +225,44 @@ class SquadronMission(TimeStampedModel):
 class Chemistry(TimeStampedModel):
     condition_proc = models.CharField(
         verbose_name="Condition that procs chemistry",
-        choices=ConditionProc.choices
+        choices=ConditionProc.choices,
+        blank=True
     )
     bonus = models.IntegerField(
         verbose_name="Percentage",
-        choices=Bonus.choices
+        choices=Bonus.choices,
+        blank=True
     )
     to_all = models.BooleanField(
-        default=False
+        default=False,
+        blank=True
     )
     reward_type = models.CharField(
         verbose_name="Rewards for proccing chemistry",
-        choices=ChemistryRewards.choices
+        choices=ChemistryRewards.choices,
+        blank=True
     )
     priority = models.IntegerField(
         verbose_name="Priority",
-        blank=False,
         choices=(
             (0,'0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')
-        )
+        ),
+        blank=True
     )
     
     def __str__(self):
-        return f"When {self.condition_proc} {self.bonus} chance to {self.reward_type}. To all? {self.to_all}. Priority:{self.priority}."
+        return f"When {self.condition_proc} {self.bonus} chance to \
+        {self.reward_type}. To all? {self.to_all}. Priority:{self.priority}."
 
 
 class UserPreference(TimeStampedModel):
-    reward_type = models.CharField(choices=RewardType.choices, verbose_name="Preferred Reward")
-    ordering = models.PositiveIntegerField(verbose_name="Ordering of preference")
+    reward_type = models.CharField(
+        choices=RewardType.choices, 
+        verbose_name="Preferred Reward"
+    )
+    ordering = models.PositiveIntegerField(
+        verbose_name="Ordering of preference"
+    )
 
     def __str__(self):
         return f"{self.reward_type} is preferred as #{self.ordering}"

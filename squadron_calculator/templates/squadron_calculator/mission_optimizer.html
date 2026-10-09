@@ -16,16 +16,14 @@
         <div class="col-md-8">
           <div class="card bg-dark text-white shadow">
             <div class="card-body">
-              <form method="post">
+              <form id='form' method="post">
                 {% csrf_token %}
-                {% for field in form %}
-                  <div class="mb-3">
-                    <label for={{ field.id_for_label }} class="form-label text-info">
-                      {{ field.label }}
-                    </label>
-                    {{ field }}
-                  </div>
-                {% endfor %}
+                {% include 'squadron_calculator/generic_form.html' %}
+                <div class="d-grid">
+                  <button type="submit" class="my-btn btn btn-primary btn-lg">
+                    Optimize
+                  </button>
+                </div>
               </form>
             </div>
           </div>
@@ -33,4 +31,20 @@
       </div>
     </div>
   </div>
+  {% if task %}
+  <div>
+    <h1> now loading...</h1>
+  </div>
+  {% endif %}
+{% endblock %}
+{% block extra_js %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.getElementById('form');
+      form.addEventListener("submit", function (event) {
+        //event.preventDefault();
+        console.log(event);
+      })
+    })
+  </script>
 {% endblock %}

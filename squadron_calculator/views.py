@@ -1,4 +1,5 @@
 from typing import Any
+from django.http import HttpRequest, HttpResponse
 from django.views.generic import (
     ListView, 
     TemplateView, 
@@ -11,8 +12,8 @@ from django.views.generic import (
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
-from .models import SquadronMember, SquadronMissionType
-from .forms import SquadronMemberForm, ChemistryForm, OptimizerForm
+from .models import SquadronMember, SquadronMissionType, SquadronMission
+from .forms import SquadronMemberForm, ChemistryForm, SquadronMissionForm
 
 class HomePage(TemplateView):
     template_name = "squadron_calculator/homepage.html"
@@ -27,7 +28,8 @@ class MyUpdateView(UpdateView):
         kwargs['action'] = 'Update'
         return super().get_context_data(**kwargs)
 
-# Class for Inheritance by MemberCreateView and MemberUpdateView to handle ChemistryForm
+# Class for Inheritance by MemberCreateView 
+# and MemberUpdateView to handle ChemistryForm
 # The subclasses will need to fill in the self.object variable accordingly
 class MemberFormView:
     def post(self, request, *args, **kwargs):
@@ -37,7 +39,8 @@ class MemberFormView:
             return self.render_to_response(
                 self.get_context_data(form=main_form, chemistry_form=chemistry_form)
             )
-        # If chemistry form contains data, they are validated and saved accordingly
+        # If chemistry form contains data, 
+        # they are validated and saved accordingly
         # If it's empty, it's ignored and the main form is saved instead
         if chemistry_form.changed_data:
             # If the chemistry form is invalid, the main form isn't saved
@@ -51,7 +54,10 @@ class MemberFormView:
                 return self.form_valid(main_form)
             else:
                 return self.render_to_response(
-                    self.get_context_data(form=main_form, chemistry_form=chemistry_form)
+                    self.get_context_data(
+                        form=main_form, 
+                        chemistry_form=chemistry_form
+                    )
                 )
         self.object = main_form.save()
         return self.form_valid(main_form)
@@ -59,7 +65,11 @@ class MemberFormView:
 class MemberListView(ListView):
     template_name = "squadron_calculator/member_listview.html"
     model = SquadronMember
-    queryset = SquadronMember.objects.select_related('chemistry', 'member_class', 'race')
+    queryset = SquadronMember.objects.select_related(
+        'chemistry', 
+        'member_class', 
+        'race'
+    )
 
 class MemberCreateView(SuccessMessageMixin, MemberFormView, MyCreateView):
     template_name = "squadron_calculator/member_form.html"
@@ -78,7 +88,8 @@ class MemberCreateView(SuccessMessageMixin, MemberFormView, MyCreateView):
         kwargs['chemistry_form'] = chemistry_form
         return super().get_context_data(**kwargs)
 
-    # Override of post method of MemberFormView to set self.object to None for creation
+    # Override of post method of MemberFormView to set self.object 
+    # to None for creation
     def post(self, request, *args, **kwargs):
         self.object = None
         return super().post(request, *args, **kwargs)
@@ -103,7 +114,8 @@ class MemberUpdateView(SuccessMessageMixin, MemberFormView, MyUpdateView):
         kwargs['chemistry_form'] = chemistry_form
         return super().get_context_data(**kwargs)
 
-    # Override of post method of MemberFormView to set self.object to the instance being updated
+    # Override of post method of MemberFormView to set self.object 
+    # to the instance being updated
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
@@ -115,12 +127,16 @@ class MemberDeleteView(DeleteView):
 
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
-        messages.success(self.request, f"Squadron Member {obj.name} deleted successfully!")
+        messages.success(
+            self.request, 
+            f"Squadron Member {obj.name} deleted successfully!"
+        )
         return super().delete(request, *args, **kwargs)
     
 class MissionListView(ListView):
-    template_name = "squadron_calculator/missions.html"
+    template_name = "squadron_calculator/mission_types.html"
     model = SquadronMissionType
+    ordering = ['-reward', 'title']
 
 class MissionDetailView(DetailView):
     template_name = "squadron_calculator/mission_type.html"
@@ -131,4 +147,25 @@ class Parametrics(TemplateView):
 
 class MissionOptimizerView(FormView):
     template_name = "squadron_calculator/mission_optimizer.html"
-    form_class = OptimizerForm
+    model = SquadronMission
+    form_class = SquadronMissionForm
+    success_url = reverse_lazy("mission_optimizer")
+
+    def form_valid(self, form):
+        print("Form valid called")
+        # if form.is_valid():
+        #     context = super().get_context_data(**self.kwargs)
+        #     context['task'] = True
+            
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        print("Get Context Data Called")
+        return super().get_context_data(**kwargs)
+    
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        print("Post Called")
+        response = super().post(request, *args, **kwargs)
+        print("Super post called")
+        return response

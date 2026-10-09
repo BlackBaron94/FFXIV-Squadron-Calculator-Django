@@ -36,10 +36,10 @@ class Command(BaseCommand):
         missions = (
             ('Allied Maneuvers', '1 Squadron Enlistment Manual'),
             ('Pest Eradication', '1 Squadron Enlistment Manual'),
-            ('Impostor Alert', '10 Priority Aetheryte Passes'),
+            ('Imposter Alert', '10 Priority Aetheryte Passes'),
             ('Invasive Testing', '10 Squadron Gear Maintenance Manuals'),       
             ('Armor Annihilation', '10 Squadron Rationing Manuals'),
-            ('Voidesent Elimination', '10 Squadron Spiritbonding Manuals'),     
+            ('Voidsent Elimination', '10 Squadron Spiritbonding Manuals'),     
             ('Cult Crackdown', '10 Squadron Engineering Manuals'),
             ('Outlaw Subjugation', '10 Squadron Survival Manuals'),
             ('Infiltrate and Rescue', '10 Squadron Battle Manuals'),

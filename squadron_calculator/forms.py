@@ -1,49 +1,52 @@
-from typing import Any, Mapping
 from django import forms
-from django.core.files.base import File
-from django.db.models.base import Model
-from django.forms.utils import ErrorList
-from .models import SquadronMember, Chemistry, SquadronMissionType, SquadronMission
+from .models import SquadronMember, Chemistry, SquadronMission
 
 class BaseForm(forms.Form):
+    start_group: list[str] | str = []
+    break_group: list[str] | str = []
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Sets Bootstrap class "form-control" for most elements 
+        # (Checkboxes and RadioSelects excluded)
         for _, field in self.fields.items():
-            if not isinstance(field, forms.BooleanField):
+            if not isinstance(field, forms.BooleanField) and \
+            not isinstance(field.widget, forms.RadioSelect):
                 field.widget.attrs['class'] = 'form-control'
+        # Sets the break/start_group attributes for formation of HTML
+        if self.start_group == '__all__' and self.break_group == '__all__':
+            for field in self.visible_fields():
+                setattr(field, 'start_group', True)
+                setattr(field, 'break_group', True)
+            return
+        for field in self.visible_fields():
+            if field.name in self.start_group:
+                setattr(field, 'start_group', True)
+            if field.name in self.break_group:
+                setattr(field, 'break_group', True)
 
 class SquadronMemberForm(BaseForm, forms.ModelForm):
-    model = SquadronMember
+    start_group = ['name', 'physical_stat', 'member_class']
+    break_group = ['name', 'tactical_stat', 'level']
     
     class Meta:
         model = SquadronMember
         exclude = ('chemistry', )
         
 class ChemistryForm(BaseForm, forms.ModelForm):
-    model = Chemistry
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for _, field in self.fields.items():
-            if field.label.lower() == 'priority':
-                field.widget.attrs['class'] = ''
-            field.required = False
+    start_group = '__all__'
+    break_group = '__all__'
 
     def clean(self):
         cleaned_data = super().clean()
         if self.changed_data:
-            if cleaned_data.get('bonus') == '':
-                self.add_error('bonus', 'Το πεδίο Bonus είναι υποχρεωτικό εφόσον συμπληρώνετε Chemistry.')
-            
-            if not cleaned_data.get('condition_proc'):
-                self.add_error('condition_proc', 'Το πεδίο Condition είναι υποχρεωτικό.')
-
-            if not cleaned_data.get('reward_type'):
-                self.add_error('reward_type', 'Το πεδίο Reward Type είναι υποχρεωτικό.')
-
-            if cleaned_data.get('priority') == '':
-                self.add_error('priority', 'Το πεδίο Priority είναι υποχρεωτικό.')
-
+            for field in self.visible_fields():
+                if cleaned_data.get(field.name) in ('', None):
+                    self.add_error(
+                        field.name, 
+                        f"Field '{field.label}' is required \
+                            when submitting a Chemistry."
+                    )
         return cleaned_data
 
     class Meta:
@@ -51,7 +54,10 @@ class ChemistryForm(BaseForm, forms.ModelForm):
         fields = '__all__'
         widgets = {'priority': forms.RadioSelect}
 
-class OptimizerForm(BaseForm, forms.ModelForm):
+class SquadronMissionForm(BaseForm, forms.ModelForm):
+    start_group = ['mission_type', 'required_physical']
+    break_group = ['mission_type', 'required_tactical']
+
     class Meta:
         model = SquadronMission
         exclude = ('success_chance_message',)
