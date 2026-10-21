@@ -9,6 +9,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.venv
 
 # Environment Variables
 .env
@@ -24,7 +25,8 @@ media/
 # OS / IDE
 .DS_Store
 .idea/
-.vscode/
+.vscode/*
+!.vscode/tasks.json
 *.swp
 
 # Logs
