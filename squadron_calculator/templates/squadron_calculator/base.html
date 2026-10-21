@@ -15,10 +15,8 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/ffxiv.ico' %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>   
-      {% block extra_css %}
-      {% endblock %}
-    </style>
+    {% block extra_css %}
+    {% endblock %}
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow fixed-top">

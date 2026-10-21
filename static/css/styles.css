@@ -122,3 +122,17 @@ input[type="radio"] {
 a {
     text-decoration: none;
 }
+
+.loading-dots span {
+    animation: blink 1.5s infinite;
+    opacity: 0;
+  }
+
+.loading-dots span:nth-child(1) { animation-delay: 0.0s; }
+.loading-dots span:nth-child(2) { animation-delay: 0.3s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes blink {
+0%, 100% { opacity: 0; }
+50% { opacity: 1; }
+}

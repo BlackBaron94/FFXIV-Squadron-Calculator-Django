@@ -11,12 +11,13 @@ from django.views.generic import (
 )
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from .models import SquadronMember, SquadronMissionType, SquadronMission
 from .forms import SquadronMemberForm, ChemistryForm, SquadronMissionForm
 
-class HomePage(TemplateView):
-    template_name = "squadron_calculator/homepage.html"
+def homepage_redirect(request):
+    return redirect(reverse_lazy("members"))
 
 class MyCreateView(CreateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -145,27 +146,19 @@ class MissionDetailView(DetailView):
 class Parametrics(TemplateView):
     template_name = "squadron_calculator/parametrics.html"
 
-class MissionOptimizerView(FormView):
+class MissionOptimizerView(MyCreateView):
     template_name = "squadron_calculator/mission_optimizer.html"
     model = SquadronMission
     form_class = SquadronMissionForm
     success_url = reverse_lazy("mission_optimizer")
 
-    def form_valid(self, form):
-        print("Form valid called")
-        # if form.is_valid():
-        #     context = super().get_context_data(**self.kwargs)
-        #     context['task'] = True
-            
-        return super().form_valid(form)
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        print("Get Context Data Called")
-        return super().get_context_data(**kwargs)
-    
-
-    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        print("Post Called")
-        response = super().post(request, *args, **kwargs)
-        print("Super post called")
-        return response
+    def form_valid(self, form) -> HttpResponse:
+        if not hasattr(self, 'object'):
+            raise Exception("No object after form valid")
+        super().form_valid(form)
+        # Instance should have an object by now.
+        mission = self.object
+        
+        return self.render_to_response(
+            self.get_context_data(task=True)
+        )

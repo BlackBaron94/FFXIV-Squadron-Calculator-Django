@@ -1,9 +1,8 @@
 {% extends 'squadron_calculator/base.html' %}
 
 {% block title %} 
-    Mission Optimizer
+  Mission Optimizer
 {% endblock %}
-
 {% block content %}
   <div class="central-wrapper container mt-5">
     <div class="title-board text-center mb-4">
@@ -26,25 +25,18 @@
                 </div>
               </form>
             </div>
+            <div class="card-body text-center">
+              {% if task %}
+                <div id="task-loadingg" class="row">
+                  <div class="col text-center h1">
+                    Now Optimizing<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  {% if task %}
-  <div>
-    <h1> now loading...</h1>
-  </div>
-  {% endif %}
-{% endblock %}
-{% block extra_js %}
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const form = document.getElementById('form');
-      form.addEventListener("submit", function (event) {
-        //event.preventDefault();
-        console.log(event);
-      })
-    })
-  </script>
 {% endblock %}

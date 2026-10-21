@@ -113,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Athens'
 
 USE_I18N = True
 
@@ -138,6 +138,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # FFXIV Game Settings
 SQUADRON_MIN_LEVEL = 1
 SQUADRON_MAX_LEVEL = 60
+STAT_MIN_VALUE = 1
+STAT_MAX_VALUE = 255
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'secondary',

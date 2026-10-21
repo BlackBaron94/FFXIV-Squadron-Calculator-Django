@@ -1,13 +1,18 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from project.settings import SQUADRON_MIN_LEVEL, SQUADRON_MAX_LEVEL
+from project.settings import (
+    SQUADRON_MIN_LEVEL, 
+    SQUADRON_MAX_LEVEL, 
+    STAT_MIN_VALUE, 
+    STAT_MAX_VALUE
+)
 from .choices import (
     RewardType, 
     SuccessChance,
     ConditionProc,
     Bonus,
     ChemistryRewards
-    )
+)
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(
@@ -126,9 +131,27 @@ def get_reward(member):
 
 class SquadronMember(TimeStampedModel):
     name = models.CharField(max_length=32, verbose_name="Name", unique=True)
-    physical_stat = models.IntegerField(verbose_name="Physical Stat")
-    mental_stat = models.IntegerField(verbose_name="Mental Stat")
-    tactical_stat = models.IntegerField(verbose_name="Tactical Stat")
+    physical_stat = models.IntegerField(
+        validators= [
+                MinValueValidator(STAT_MIN_VALUE),
+                MaxValueValidator(STAT_MAX_VALUE)
+        ],
+        verbose_name="Physical Stat"
+    )
+    mental_stat = models.IntegerField(
+        validators= [
+                MinValueValidator(STAT_MIN_VALUE),
+                MaxValueValidator(STAT_MAX_VALUE)
+        ],
+        verbose_name="Mental Stat"
+    )
+    tactical_stat = models.IntegerField(
+        validators= [
+                MinValueValidator(STAT_MIN_VALUE),
+                MaxValueValidator(STAT_MAX_VALUE)
+        ],
+        verbose_name="Tactical Stat"
+    )
     member_class = models.ForeignKey(
         MemberClass, 
         on_delete=models.PROTECT, 
@@ -212,10 +235,24 @@ class SquadronMission(TimeStampedModel):
         verbose_name="Success Chance Message"
     )
     required_physical = models.IntegerField(
+        validators= [
+            MinValueValidator(STAT_MIN_VALUE),
+            MaxValueValidator(STAT_MAX_VALUE)
+        ],
         verbose_name="Required Physical Stat"
     )
-    required_mental = models.IntegerField(verbose_name="Required Mental Stat")
+    required_mental = models.IntegerField(
+        validators= [
+            MinValueValidator(STAT_MIN_VALUE),
+            MaxValueValidator(STAT_MAX_VALUE)
+        ],
+        verbose_name="Required Mental Stat"
+    )
     required_tactical = models.IntegerField(
+        validators= [
+            MinValueValidator(STAT_MIN_VALUE),
+            MaxValueValidator(STAT_MAX_VALUE)
+        ],
         verbose_name="Required Tactical Stat"
     )
     
