@@ -135,11 +135,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# FFXIV Game Settings
-SQUADRON_MIN_LEVEL = 1
-SQUADRON_MAX_LEVEL = 60
-STAT_MIN_VALUE = 1
-STAT_MAX_VALUE = 255
+
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'secondary',
@@ -156,3 +152,18 @@ if DEBUG:
 else:
     INTERNAL_IPS = env.list("INTERNAL_IPS")
     ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+
+# Celery Settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE  # Χρησιμοποιεί το timezone του Django
+
+
+# FFXIV Game Settings
+SQUADRON_MIN_LEVEL = 1
+SQUADRON_MAX_LEVEL = 60
+STAT_MIN_VALUE = 1
+STAT_MAX_VALUE = 255

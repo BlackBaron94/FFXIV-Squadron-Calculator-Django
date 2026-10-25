@@ -4,7 +4,9 @@
         {
             "label": "Start Dev Server",
             "dependsOn": [
-                "Django Server"
+                "Django Server",
+                "WSL",
+                "Celery"
             ],
             "group": {
                 "kind": "build",
@@ -15,6 +17,18 @@
             "label": "Django Server",
             "type": "shell",
             "command": ".\\.venv\\Scripts\\activate; python manage.py runserver",
+            "presentation": {"group": "fullstack1", "panel": "dedicated"}
+        },
+        {
+            "label": "WSL",
+            "type": "shell",
+            "command": "wsl",
+            "presentation": {"group": "fullstack1", "panel": "dedicated"}
+        },
+        {
+            "label": "Celery",
+            "type": "shell",
+            "command": ".\\.venv\\Scripts\\activate; celery -A project worker --concurrency=8 --pool=threads --loglevel=info",
             "presentation": {"group": "fullstack1", "panel": "dedicated"}
         },
         {

@@ -11,4 +11,5 @@ urlpatterns = [
     path("mission-type/<int:pk>/", views.MissionDetailView.as_view(), name="mission_type"),
     path("parametrics/", views.Parametrics.as_view(), name="parametrics"),
     path("mission-optimizer/", views.MissionOptimizerView.as_view(), name="mission_optimizer"),
+    path("get-task-update/<str:task_id>/", views.GetTaskUpdateAPIView.as_view(), name="get_task_update")
 ]

@@ -1,5 +1,5 @@
 from typing import Any
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.generic import (
     ListView, 
     TemplateView, 
@@ -9,12 +9,15 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from celery.result import AsyncResult
+from rest_framework.views import APIView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from .models import SquadronMember, SquadronMissionType, SquadronMission
 from .forms import SquadronMemberForm, ChemistryForm, SquadronMissionForm
+from .tasks import count_a_lot
 
 def homepage_redirect(request):
     return redirect(reverse_lazy("members"))
@@ -158,7 +161,12 @@ class MissionOptimizerView(MyCreateView):
         super().form_valid(form)
         # Instance should have an object by now.
         mission = self.object
-        
+        task_id = count_a_lot.delay()
         return self.render_to_response(
-            self.get_context_data(task=True)
+            self.get_context_data(task=task_id)
         )
+
+class GetTaskUpdateAPIView(APIView):
+    def get(self, *args, **kwargs):
+        task = AsyncResult(kwargs.get("task_id"))
+        return JsonResponse({"task_result": f"{task.result}"})
